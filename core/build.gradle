@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'com.pbs.core'
+    namespace 'com.filkom.core'
     compileSdk 32
 
     defaultConfig {
