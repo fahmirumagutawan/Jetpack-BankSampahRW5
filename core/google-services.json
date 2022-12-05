@@ -41,6 +41,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959151494883:android:7c1dcbd186d87db24497d6",
+        "android_client_info": {
+          "package_name": "com.filkom.core"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959151494883-dq0ki6kt4qahjm810bl6mgqhbeu7ibbv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.filkom.core",
+            "certificate_hash": "284085a77cb2bc62295b9f3e905e66856be927ed"
+          }
+        },
+        {
+          "client_id": "959151494883-lnt3rg6pnfmd2qvm8vn5f141i7m9quqf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2ZtYtYuIJTuvR4572aqPYTGaIyu3XMfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959151494883-lnt3rg6pnfmd2qvm8vn5f141i7m9quqf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
