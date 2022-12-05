@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'com.pbs.core'
+    namespace 'com.filkom.core'
     compileSdk 32
 
     defaultConfig {
@@ -60,6 +60,10 @@ dependencies {
 
     // Kotlin serializer
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:31.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }
 
 kapt {
