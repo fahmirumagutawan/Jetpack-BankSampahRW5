@@ -1,6 +1,5 @@
 package com.filkom.banksampahdelima.screen
 
-import android.window.SplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -20,6 +20,7 @@ import com.filkom.banksampahdelima.component.AppText
 import com.filkom.banksampahdelima.component.TextType
 import com.filkom.banksampahdelima.ui.theme.AppColor
 import com.filkom.banksampahdelima.viewmodel.SplashViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
@@ -32,10 +33,28 @@ fun SplashScreen(
     val logoWidth = LocalConfiguration.current.screenWidthDp/3
 
     /**Function*/
+    LaunchedEffect(key1 = true){
+        delay(3000)
+        viewModel.getFirstTimeState { firstTime ->
+            when{
+                firstTime -> navigateToOnboard()
+                else -> {
+                    viewModel.getBearerToken { token ->
+                        when(token){
+                            "" -> navigateToLogin()
+                            else -> navigateToHome()
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /**Content*/
     Box(
-        modifier = Modifier.fillMaxSize().background(AppColor.GreenSuccess),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppColor.Primary500),
         contentAlignment = Alignment.Center
     ) {
         Column(
