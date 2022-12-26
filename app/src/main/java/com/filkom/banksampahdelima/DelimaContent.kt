@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.filkom.banksampahdelima.navigation.AppNavRoute
+import com.filkom.banksampahdelima.screen.OnboardScreen
 import com.filkom.banksampahdelima.screen.SplashScreen
 import com.filkom.banksampahdelima.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +47,9 @@ fun DelimaNavHost(mainViewModel: MainViewModel) {
         }
 
         composable(route = AppNavRoute.OnboardScreen.name) {
-
+            OnboardScreen(
+                navigateToLogin = { /*TODO*/ },
+                navigateToRegister = { /*TODO*/ })
         }
     }
 }
