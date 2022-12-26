@@ -2,6 +2,7 @@ package com.filkom.banksampahdelima.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -44,6 +46,7 @@ fun OnboardScreen(
     val imgWidth = LocalConfiguration.current.screenWidthDp / 1.5
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
+    val halfHeight = LocalConfiguration.current.screenHeightDp / 2
 
     //Function
 
@@ -55,85 +58,90 @@ fun OnboardScreen(
         OnboardItem.values()[index].let { item ->
             LazyColumn(
                 modifier = Modifier
-                    .padding(32.dp)
+                    .padding(horizontal = 32.dp)
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 //Img
                 item {
-                    AsyncImage(
-                        modifier = Modifier.width(imgWidth.dp),
-                        model = item.imgId,
-                        contentDescription = item.name
-                    )
+                    Box(modifier = Modifier.height(halfHeight.dp), contentAlignment = Center) {
+                        AsyncImage(
+                            modifier = Modifier.width(imgWidth.dp),
+                            model = item.imgId,
+                            contentDescription = item.name
+                        )
+                    }
                 }
 
                 //Title & Content
                 item {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        AppText(text = item.title, textType = TextType.H1)
+                    Column(
+                        modifier = Modifier.height(halfHeight.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        //Texts
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            AppText(text = item.title, textType = TextType.H1)
 
-                        when (item) {
-                            OnboardItem.Onboard3 -> {
-                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    //daftar
-                                    AppButton(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        onClick = navigateToRegister,
-                                        text = "Daftar"
-                                    )
+                            when (item) {
+                                OnboardItem.Onboard3 -> {
+                                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        //daftar
+                                        AppButton(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            onClick = navigateToRegister,
+                                            text = "Daftar"
+                                        )
 
-                                    //masuk
-                                    AppButton(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        onClick = navigateToLogin,
-                                        text = "Sudah punya akun? Masuk",
-                                        borderWidth = 1.dp,
-                                        borderColor = AppColor.Black,
-                                        textColor = AppColor.Black,
-                                        backgroundColor = AppColor.White
-                                    )
+                                        //masuk
+                                        AppButton(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            onClick = navigateToLogin,
+                                            text = "Sudah punya akun? Masuk",
+                                            borderWidth = 1.dp,
+                                            borderColor = AppColor.Black,
+                                            textColor = AppColor.Black,
+                                            backgroundColor = AppColor.White
+                                        )
+                                    }
                                 }
-                            }
 
-                            else -> {
-                                AppText(text = item.text, textType = TextType.Body1)
+                                else -> {
+                                    AppText(text = item.text, textType = TextType.Body1)
+                                }
                             }
                         }
-                    }
-                }
 
-                //Bottom section
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = CenterVertically,
-                        horizontalArrangement = SpaceBetween
-                    ) {
-                        HorizontalPagerIndicator(pagerState = pagerState)
-
+                        //Btns
                         Row(
+                            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp),
                             verticalAlignment = CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = SpaceBetween
                         ) {
-                            //Kembali btn
-                            if (index > 0) {
-                                AppTextButton(onClick = {
-                                    coroutineScope.launch {
-                                        pagerState.animateScrollToPage(index - 1)
-                                    }
-                                }) {
-                                    AppText(text = "Kembali", textType = TextType.Body1)
-                                }
-                            }
+                            HorizontalPagerIndicator(pagerState = pagerState)
 
-                            if (index < OnboardItem.values().size - 1) {
-                                AppButton(onClick = {
-                                    coroutineScope.launch {
-                                        pagerState.animateScrollToPage(index + 1)
+                            Row(
+                                verticalAlignment = CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                //Kembali btn
+                                if (index > 0) {
+                                    AppTextButton(onClick = {
+                                        coroutineScope.launch {
+                                            pagerState.animateScrollToPage(index - 1)
+                                        }
+                                    }) {
+                                        AppText(text = "Kembali", textType = TextType.Body1)
                                     }
-                                }, text = "Selanjutnya")
+                                }
+
+                                if (index < OnboardItem.values().size - 1) {
+                                    AppButton(onClick = {
+                                        coroutineScope.launch {
+                                            pagerState.animateScrollToPage(index + 1)
+                                        }
+                                    }, text = "Selanjutnya")
+                                }
                             }
                         }
                     }

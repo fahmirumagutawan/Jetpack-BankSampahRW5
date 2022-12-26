@@ -6,7 +6,8 @@ object AppColor {
     val Black = Color(0xff000000)
     val White = Color(0xffffffff)
 
-    val GrayDisabled = Color(0xfDBDBDB)
+    val GrayDisabled = Color(0xffDBDBDB)
+    val GrayPlaceholder = Color(0xFFAAAAAA)
 
     val Primary600 = Color(0xff6ACC1A)
     val Primary500 = Color(0xff439F6E)

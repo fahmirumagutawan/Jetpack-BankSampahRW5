@@ -40,7 +40,6 @@ class SignupViewModel @Inject constructor(
             !isPasswordError.value &&
             checkedState.value
         ) {
-
             val email = phoneNumberState.value + "@gmail.com"
             val password = passwordState.value
 

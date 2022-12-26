@@ -28,6 +28,8 @@ import coil.compose.AsyncImage
 import com.filkom.banksampahdelima.R
 import com.filkom.banksampahdelima.component.AppButton
 import com.filkom.banksampahdelima.component.AppText
+import com.filkom.banksampahdelima.component.AppTextButton
+import com.filkom.banksampahdelima.component.AppTextInputNormal
 import com.filkom.banksampahdelima.component.TextType
 import com.filkom.banksampahdelima.viewmodel.LoginViewModel
 
@@ -67,54 +69,87 @@ fun LoginScreen(
 
         // Phone Number
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
+//        OutlinedTextField(
+//            value = viewModel.phoneNumberState.value,
+//            onValueChange = {
+//                viewModel.phoneNumberState.value = it
+//            },
+//            label = {
+//                Text(text = "Nomor Telepon")
+//            },
+//            singleLine = true,
+//            maxLines = 1,
+//            colors = TextFieldDefaults.outlinedTextFieldColors(
+//                focusedBorderColor = Color.Gray,
+//                unfocusedBorderColor = Color.Gray,
+//                focusedLabelColor = Color.Gray
+//            ),
+//            keyboardOptions = KeyboardOptions(
+//                keyboardType = KeyboardType.Number,
+//                imeAction = ImeAction.Done
+//            ),
+//            modifier = Modifier.fillMaxWidth()
+//        )
+        AppTextInputNormal(
+            modifier = Modifier.fillMaxWidth(),
+            placeHolder = "Nomor Telepon",
             value = viewModel.phoneNumberState.value,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             onValueChange = {
+                viewModel.phoneNumberFirstState.value = false
                 viewModel.phoneNumberState.value = it
             },
-            label = {
-                Text(text = "Nomor Telepon")
-            },
-            singleLine = true,
-            maxLines = 1,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.Gray,
-                focusedLabelColor = Color.Gray
-            ),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            modifier = Modifier.fillMaxWidth()
+            isError = !viewModel.isPhoneNumberValid.value
+                    || !viewModel.isPhoneNumberNotEmpty.value,
+            showWarningMessage = !viewModel.isPhoneNumberValid.value
+                    || !viewModel.isPhoneNumberNotEmpty.value,
+            warningMessage = "Pastikan format nomor anda benar"
         )
 
         // Password
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
+//        OutlinedTextField(
+//            value = viewModel.passwordState.value,
+//            onValueChange = {
+//                viewModel.passwordState.value = it
+//            },
+//            label = {
+//                Text(text = "Password")
+//            },
+//            singleLine = true,
+//            maxLines = 1,
+//            visualTransformation = PasswordVisualTransformation(),
+//            colors = TextFieldDefaults.outlinedTextFieldColors(
+//                focusedBorderColor = Color.Gray,
+//                unfocusedBorderColor = Color.Gray,
+//                focusedLabelColor = Color.Gray
+//            ),
+//            modifier = Modifier.fillMaxWidth()
+//        )
+        AppTextInputNormal(
+            modifier = Modifier.fillMaxWidth(),
+            placeHolder = "Password",
             value = viewModel.passwordState.value,
+            visualTransformation = PasswordVisualTransformation(),
             onValueChange = {
+                viewModel.passwordFirstState.value = false
                 viewModel.passwordState.value = it
             },
-            label = {
-                Text(text = "Password")
-            },
-            singleLine = true,
-            maxLines = 1,
-            visualTransformation = PasswordVisualTransformation(),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.Gray,
-                focusedLabelColor = Color.Gray
-            ),
-            modifier = Modifier.fillMaxWidth()
+            isError = !viewModel.isPasswordValid.value
+                    || !viewModel.isPasswordNotEmpty.value,
+            showWarningMessage = !viewModel.isPasswordValid.value
+                    || !viewModel.isPasswordNotEmpty.value,
+            warningMessage = "Pastikan password sepanjang 6 huruf atau lebih"
         )
+
         Spacer(modifier = Modifier.height(16.dp))
-        AppText(
-            text = "Lupa Password?",
-            textType = TextType.H5,
-            color = Color.Gray
-        )
+        AppTextButton(onClick = navigateToForgetPassword) {
+            AppText(
+                text = "Lupa Password?",
+                textType = TextType.H5,
+                color = Color.Gray
+            )
+        }
 
         // Button
         Spacer(modifier = Modifier.height(72.dp))
@@ -133,24 +168,23 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = buildAnnotatedString {
-                    append("Belum punya akun? ")
-                    withStyle(style = SpanStyle(
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        textDecoration = TextDecoration.Underline
-                    )
-                    ) {
-                        append("Daftar")
-                    }
-                },
-                fontFamily = FontFamily(Font(R.font.opensauceone_regular)),
-                fontSize = 14.sp,
-                modifier = Modifier.clickable {
-                    navigateToSignup()
-                }
-            )
+            AppTextButton(onClick = navigateToSignup) {
+                Text(
+                    text = buildAnnotatedString {
+                        append("Belum punya akun? ")
+                        withStyle(style = SpanStyle(
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            textDecoration = TextDecoration.Underline
+                        )
+                        ) {
+                            append("Daftar")
+                        }
+                    },
+                    fontFamily = FontFamily(Font(R.font.opensauceone_regular)),
+                    fontSize = 14.sp
+                )
+            }
         }
     }
 }

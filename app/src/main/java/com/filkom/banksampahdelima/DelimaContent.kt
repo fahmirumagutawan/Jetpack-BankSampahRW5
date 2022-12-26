@@ -43,14 +43,16 @@ fun DelimaNavHost(mainViewModel: MainViewModel) {
                 navigateToOnboard = {
                     navController.navigate(route = AppNavRoute.OnboardScreen.name)
                 },
-                navigateToLogin = { /*TODO*/ },
+                navigateToLogin = {
+                    navController.navigate(route = AppNavRoute.LoginScreen.name)
+                },
                 navigateToHome = { /*TODO*/ }
             )
         }
 
         composable(route = AppNavRoute.OnboardScreen.name) {
             OnboardScreen(
-                navigateToLogin = {  navController.navigate(route = AppNavRoute.LoginScreen.name) },
+                navigateToLogin = { navController.navigate(route = AppNavRoute.LoginScreen.name) },
                 navigateToRegister = { navController.navigate(route = AppNavRoute.SignupScreen.name) })
         }
 
