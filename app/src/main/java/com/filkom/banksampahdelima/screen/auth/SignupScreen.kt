@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -17,12 +19,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,6 +29,7 @@ import coil.compose.AsyncImage
 import com.filkom.banksampahdelima.R
 import com.filkom.banksampahdelima.component.AppButton
 import com.filkom.banksampahdelima.component.AppText
+import com.filkom.banksampahdelima.component.AppTextInputNormal
 import com.filkom.banksampahdelima.component.TextType
 import com.filkom.banksampahdelima.viewmodel.SignupViewModel
 
@@ -68,129 +68,65 @@ fun SignupScreen(
 
         // Name
         Spacer(modifier = Modifier.height(32.dp))
-        OutlinedTextField(
-            value = viewModel.usernameState.value,
+        AppTextInputNormal(
+            modifier = Modifier.fillMaxWidth(),
+            placeHolder = "Nama",
+            value = viewModel.nameState.value,
             onValueChange = {
-                viewModel.usernameState.value = it
-                viewModel.checkFormValidation()
+                viewModel.nameFirstState.value = false
+                viewModel.nameState.value = it
             },
-            label = {
-                Text(text = "Nama")
-            },
-            singleLine = true,
-            maxLines = 1,
-            isError = viewModel.isNameError.value,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.Gray,
-                focusedLabelColor = Color.Gray
-            ),
-            modifier = Modifier.fillMaxWidth()
+            isError = !viewModel.isNameValid.value,
+            showWarningMessage = !viewModel.isNameValid.value,
+            warningMessage = "Nama tidak boleh kosong!"
         )
-        if (viewModel.isNameError.value) {
-            Spacer(modifier = Modifier.height(4.dp))
-            AppText(
-                text = "Nama Tidak Boleh Kosong!",
-                color = Color.Gray,
-                textType = TextType.ExtraSmall
-            )
-        }
 
 
         // Phone Number
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
+        AppTextInputNormal(
+            modifier = Modifier.fillMaxWidth(),
+            placeHolder = "Nomor Telepon",
             value = viewModel.phoneNumberState.value,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             onValueChange = {
+                viewModel.phoneNumberFirstState.value = false
                 viewModel.phoneNumberState.value = it
-                viewModel.checkFormValidation()
             },
-            label = {
-                Text(text = "Nomor Telepon")
-            },
-            singleLine = true,
-            maxLines = 1,
-            isError = viewModel.isPhoneNumberError.value,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.Gray,
-                focusedLabelColor = Color.Gray
-            ),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            modifier = Modifier.fillMaxWidth()
+            isError = !viewModel.isPhoneNumberValid.value,
+            showWarningMessage = !viewModel.isPhoneNumberValid.value,
+            warningMessage = "Format nomor telepon salah!"
         )
-        if (viewModel.isPhoneNumberError.value) {
-            Spacer(modifier = Modifier.height(4.dp))
-            AppText(
-                text = "Nomor Telepon Tidak Valid!",
-                color = Color.Gray,
-                textType = TextType.ExtraSmall
-            )
-        }
 
         // Alamat
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
+        AppTextInputNormal(
+            modifier = Modifier.fillMaxWidth(),
+            placeHolder = "Alamat",
             value = viewModel.addressState.value,
             onValueChange = {
+                viewModel.addressFirstState.value = false
                 viewModel.addressState.value = it
-                viewModel.checkFormValidation()
             },
-            label = {
-                Text(text = "Alamat")
-            },
-            singleLine = true,
-            maxLines = 1,
-            isError = viewModel.isAddressError.value,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.Gray,
-                focusedLabelColor = Color.Gray
-            ),
-            modifier = Modifier.fillMaxWidth()
+            isError = !viewModel.isAddressValid.value,
+            showWarningMessage = !viewModel.isAddressValid.value,
+            warningMessage = "Alamat tidak boleh kosong!"
         )
-        if (viewModel.isAddressError.value) {
-            Spacer(modifier = Modifier.height(4.dp))
-            AppText(
-                text = "Alamat Tidak Boleh Kosong!",
-                color = Color.Gray,
-                textType = TextType.ExtraSmall
-            )
-        }
 
         // Password
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
+        AppTextInputNormal(
+            modifier = Modifier.fillMaxWidth(),
+            placeHolder = "Password",
             value = viewModel.passwordState.value,
             onValueChange = {
+                viewModel.passwordFirstState.value = false
                 viewModel.passwordState.value = it
-                viewModel.checkFormValidation()
             },
-            label = {
-                Text(text = "Password")
-            },
-            singleLine = true,
-            maxLines = 1,
-            visualTransformation = PasswordVisualTransformation(),
-            isError = viewModel.isPasswordError.value,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.Gray,
-                focusedLabelColor = Color.Gray
-            ),
-            modifier = Modifier.fillMaxWidth()
+            isError = !viewModel.isPasswordValid.value,
+            showWarningMessage = !viewModel.isPasswordValid.value,
+            warningMessage = "Password harus lebih dari 6 karakter!"
         )
-        if (viewModel.isPasswordError.value) {
-            Spacer(modifier = Modifier.height(4.dp))
-            AppText(
-                text = "Password Harus Lebih Dari 8 Karakter!",
-                color = Color.Gray,
-                textType = TextType.ExtraSmall
-            )
-        }
 
 
         // Terms

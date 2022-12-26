@@ -13,27 +13,20 @@ class LoginViewModel @Inject constructor(
     private val repository: Repository,
 ) : ViewModel() {
     var phoneNumberState = mutableStateOf("")
-    val phoneNumberFirstState = mutableStateOf(true)
+    var phoneNumberFirstState = mutableStateOf(true)
     val isPhoneNumberValid = derivedStateOf {
-        phoneNumberState.value.length >= 8
-                || phoneNumberFirstState.value
-    }
-    val isPhoneNumberNotEmpty = derivedStateOf {
-        phoneNumberState.value.isNotEmpty()
+        ( phoneNumberState.value.length >= 8 && phoneNumberState.value.isNotEmpty())
                 || phoneNumberFirstState.value
     }
     var passwordState = mutableStateOf("")
-    val passwordFirstState = mutableStateOf(true)
+    var passwordFirstState = mutableStateOf(true)
     val isPasswordValid = derivedStateOf {
-        passwordState.value.length >= 6
+        ( passwordState.value.length >= 6 && passwordState.value.isNotEmpty())
                 || passwordFirstState.value
     }
-    val isPasswordNotEmpty = derivedStateOf {
-        passwordState.value.isNotEmpty()
-                || passwordFirstState.value
-    }
-    var isLoginSuccess = mutableStateOf(false)
 
+
+    var isLoginSuccess = mutableStateOf(false)
     fun login() {
         val email = phoneNumberState.value + "@gmail.com"
         val password = passwordState.value
