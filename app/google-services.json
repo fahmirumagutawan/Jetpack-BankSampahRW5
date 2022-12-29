@@ -1,41 +1,78 @@
 {
   "project_info": {
-    "project_number": "959151494883",
-    "project_id": "delima-c077e",
-    "storage_bucket": "delima-c077e.appspot.com"
+    "project_number": "210882791266",
+    "project_id": "bank-sampah-delima",
+    "storage_bucket": "bank-sampah-delima.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:959151494883:android:f2276dfa1d0eeca84497d6",
+        "mobilesdk_app_id": "1:210882791266:android:80de457c54dfcc9f350e3b",
         "android_client_info": {
           "package_name": "com.filkom.banksampahdelima"
         }
       },
       "oauth_client": [
         {
-          "client_id": "959151494883-55mcm9f63d6q2m27ebipm12d52mahdqd.apps.googleusercontent.com",
+          "client_id": "210882791266-qm8krfn5eql4u93c7refebm2il11ago0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.filkom.banksampahdelima",
-            "certificate_hash": "284085a77cb2bc62295b9f3e905e66856be927ed"
+            "certificate_hash": "9f272c087feb3406626b4e1361a98f58e798325f"
           }
         },
         {
-          "client_id": "959151494883-lnt3rg6pnfmd2qvm8vn5f141i7m9quqf.apps.googleusercontent.com",
+          "client_id": "210882791266-im2aaabrc07os7rul2ccfe4qkfuqfnmf.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA2ZtYtYuIJTuvR4572aqPYTGaIyu3XMfU"
+          "current_key": "AIzaSyBaEiow2qf38QNA92_IQ8jEAsSQ-GG9SHc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "959151494883-lnt3rg6pnfmd2qvm8vn5f141i7m9quqf.apps.googleusercontent.com",
+              "client_id": "210882791266-im2aaabrc07os7rul2ccfe4qkfuqfnmf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210882791266:android:5dc9e71ceeb587ce350e3b",
+        "android_client_info": {
+          "package_name": "com.filkom.core"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210882791266-3v5r0ujeg71mm6i1jcha7tu4iddm6eq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.filkom.core",
+            "certificate_hash": "9f272c087feb3406626b4e1361a98f58e798325f"
+          }
+        },
+        {
+          "client_id": "210882791266-im2aaabrc07os7rul2ccfe4qkfuqfnmf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaEiow2qf38QNA92_IQ8jEAsSQ-GG9SHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210882791266-im2aaabrc07os7rul2ccfe4qkfuqfnmf.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
