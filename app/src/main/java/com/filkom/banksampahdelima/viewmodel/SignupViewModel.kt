@@ -1,6 +1,7 @@
 package com.filkom.banksampahdelima.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.filkom.core.data.repository.Repository
@@ -11,33 +12,41 @@ import javax.inject.Inject
 class SignupViewModel @Inject constructor(
     private val repository: Repository
 ): ViewModel() {
-    var usernameState = mutableStateOf("")
+    var nameState = mutableStateOf("")
+    var nameFirstState = mutableStateOf(true)
+    var isNameValid = derivedStateOf {
+        nameState.value.isNotEmpty() || nameFirstState.value
+    }
+
     var phoneNumberState = mutableStateOf("")
+    var phoneNumberFirstState = mutableStateOf(true)
+    val isPhoneNumberValid = derivedStateOf {
+        ( phoneNumberState.value.length >= 8 && phoneNumberState.value.isNotEmpty())
+                || phoneNumberFirstState.value
+    }
+
     var addressState = mutableStateOf("")
+    var addressFirstState = mutableStateOf(true)
+    var isAddressValid = derivedStateOf {
+        addressState.value.isNotEmpty() || addressFirstState.value
+    }
+
     var passwordState = mutableStateOf("")
-    var isNameError = mutableStateOf(true)
-    var isPhoneNumberError = mutableStateOf(true)
-    var isAddressError = mutableStateOf(true)
-    var isPasswordError = mutableStateOf(true)
+    var passwordFirstState = mutableStateOf(true)
+    val isPasswordValid = derivedStateOf {
+        ( passwordState.value.length >= 6 && passwordState.value.isNotEmpty())
+                || passwordFirstState.value
+    }
+
     var checkedState = mutableStateOf(false)
     var isSignupSuccess = mutableStateOf(false)
 
-    fun checkFormValidation() {
-        if (usernameState.value.isNotEmpty())
-            isNameError.value = false
-        if (phoneNumberState.value.length in 10..13)
-            isPhoneNumberError.value = false
-        if (addressState.value.isNotEmpty())
-            isAddressError.value = false
-        if (passwordState.value.length > 8)
-            isPasswordError.value = false
-    }
 
     fun signUp() {
-        if (!isNameError.value &&
-            !isPhoneNumberError.value &&
-            !isAddressError.value &&
-            !isPasswordError.value &&
+        if (!isNameValid.value &&
+            !isPhoneNumberValid.value &&
+            !isAddressValid.value &&
+            !isPasswordValid.value &&
             checkedState.value
         ) {
             val email = phoneNumberState.value + "@gmail.com"
