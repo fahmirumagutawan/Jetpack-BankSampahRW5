@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.filkom.banksampahdelima.R
 import com.filkom.banksampahdelima.component.*
+import com.filkom.banksampahdelima.ui.theme.AppColor
 import com.filkom.banksampahdelima.viewmodel.LoginViewModel
 
 @Composable
@@ -72,24 +73,32 @@ fun LoginScreen(
             },
             isError = !viewModel.isPhoneNumberValid.value,
             showWarningMessage = !viewModel.isPhoneNumberValid.value,
-            warningMessage = "Pastikan format nomor anda benar"
+            warningMessage = "Pastikan format nomor anda benar",
+            leadingIcon = {
+                AppText(
+                    modifier = Modifier.padding(start = 8.dp),
+                    text = "+62",
+                    textType = TextType.H3,
+                    color = AppColor.Black
+                )
+            }
         )
 
-        // Password
-        Spacer(modifier = Modifier.height(8.dp))
-        AppTextInputNormal(
-            modifier = Modifier.fillMaxWidth(),
-            placeHolder = "Password",
-            value = viewModel.passwordState.value,
-            visualTransformation = PasswordVisualTransformation(),
-            onValueChange = {
-                viewModel.passwordFirstState.value = false
-                viewModel.passwordState.value = it
-            },
-            isError = !viewModel.isPasswordValid.value,
-            showWarningMessage = !viewModel.isPasswordValid.value,
-            warningMessage = "Pastikan password sepanjang 6 huruf atau lebih"
-        )
+//        // Password
+//        Spacer(modifier = Modifier.height(8.dp))
+//        AppTextInputNormal(
+//            modifier = Modifier.fillMaxWidth(),
+//            placeHolder = "Password",
+//            value = viewModel.passwordState.value,
+//            visualTransformation = PasswordVisualTransformation(),
+//            onValueChange = {
+//                viewModel.passwordFirstState.value = false
+//                viewModel.passwordState.value = it
+//            },
+//            isError = !viewModel.isPasswordValid.value,
+//            showWarningMessage = !viewModel.isPasswordValid.value,
+//            warningMessage = "Pastikan password sepanjang 6 huruf atau lebih"
+//        )
 
         Spacer(modifier = Modifier.height(16.dp))
         AppTextButton(onClick = navigateToForgetPassword) {

@@ -18,6 +18,7 @@ fun AppText(
     textType: TextType
 ) {
     Text(
+        modifier = modifier,
         text = text,
         textAlign = textAlign,
         color = color,

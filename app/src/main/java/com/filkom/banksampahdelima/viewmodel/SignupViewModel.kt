@@ -4,14 +4,20 @@ import android.util.Log
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.filkom.banksampahdelima.phoneNumberAuthOptions
 import com.filkom.core.data.repository.Repository
+import com.filkom.core.util.DelimaException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SignupViewModel @Inject constructor(
     private val repository: Repository
-): ViewModel() {
+) : ViewModel() {
     var nameState = mutableStateOf("")
     var nameFirstState = mutableStateOf(true)
     var isNameValid = derivedStateOf {
@@ -21,7 +27,7 @@ class SignupViewModel @Inject constructor(
     var phoneNumberState = mutableStateOf("")
     var phoneNumberFirstState = mutableStateOf(true)
     val isPhoneNumberValid = derivedStateOf {
-        ( phoneNumberState.value.length >= 8 && phoneNumberState.value.isNotEmpty())
+        (phoneNumberState.value.length >= 8 && phoneNumberState.value.isNotEmpty())
                 || phoneNumberFirstState.value
     }
 
@@ -34,34 +40,39 @@ class SignupViewModel @Inject constructor(
     var passwordState = mutableStateOf("")
     var passwordFirstState = mutableStateOf(true)
     val isPasswordValid = derivedStateOf {
-        ( passwordState.value.length >= 6 && passwordState.value.isNotEmpty())
+        (passwordState.value.length >= 6 && passwordState.value.isNotEmpty())
                 || passwordFirstState.value
     }
 
     var checkedState = mutableStateOf(false)
-    var isSignupSuccess = mutableStateOf(false)
 
-
-    fun signUp() {
-        if (!isNameValid.value &&
-            !isPhoneNumberValid.value &&
-            !isAddressValid.value &&
-            !isPasswordValid.value &&
-            checkedState.value
-        ) {
-            val email = phoneNumberState.value + "@gmail.com"
-            val password = passwordState.value
-
-            repository.signUpWithEmailAndPassword(
-                email = email,
-                password = password,
-                onSuccess = {
-                    Log.d("SIGNUP", email + password)
-                },
-                onFailed = {
-                    Log.d("SIGNUP", it.getMessage())
-                }
-            )
-        }
+    val isValidToSignUp = derivedStateOf {
+        isNameValid.value &&
+                isPhoneNumberValid.value &&
+                isAddressValid.value &&
+                isPasswordValid.value &&
+                checkedState.value
     }
+
+    val otpState = mutableStateOf("")
+    val otpSecondLeft = mutableStateOf(0)
+    val verificationId = mutableStateOf("")
+
+    fun sendOtp(
+        onAutoCompleted: (PhoneAuthCredential) -> Unit,
+        onCodeSent: (String) -> Unit,
+        onFailed: (DelimaException) -> Unit
+    ) = repository.sendOtp(
+        "+62${phoneNumberState.value}",
+        phoneNumberAuthOptions,
+        onAutoCompleted,
+        onCodeSent,
+        onFailed
+    )
+
+    fun signUpWithCredential(
+        credential: PhoneAuthCredential,
+        onSuccess: () -> Unit,
+        onFailed: (DelimaException) -> Unit
+    ) = repository.signUpWithCredential(credential, nameState.value, addressState.value, onSuccess, onFailed)
 }
