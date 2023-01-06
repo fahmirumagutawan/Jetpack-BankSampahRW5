@@ -12,6 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Bank Sampah RW 5"
+rootProject.name = "Delima Bank Sampah"
 include ':app'
 include ':core'
