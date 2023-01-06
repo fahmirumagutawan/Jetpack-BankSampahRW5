@@ -54,25 +54,21 @@ class SignupViewModel @Inject constructor(
                 checkedState.value
     }
 
-    val otpState = mutableStateOf("")
-    val otpSecondLeft = mutableStateOf(0)
-    val verificationId = mutableStateOf("")
+    fun signUp(
+        onSuccess:() -> Unit,
+        onFailed:(DelimaException) -> Unit
+    ){
+        val email = phoneNumberState.value + "@gmail.com"
+        val password = passwordState.value
 
-    fun sendOtp(
-        onAutoCompleted: (PhoneAuthCredential) -> Unit,
-        onCodeSent: (String) -> Unit,
-        onFailed: (DelimaException) -> Unit
-    ) = repository.sendOtp(
-        "+62${phoneNumberState.value}",
-        phoneNumberAuthOptions,
-        onAutoCompleted,
-        onCodeSent,
-        onFailed
-    )
-
-    fun signUpWithCredential(
-        credential: PhoneAuthCredential,
-        onSuccess: () -> Unit,
-        onFailed: (DelimaException) -> Unit
-    ) = repository.signUpWithCredential(credential, nameState.value, addressState.value, onSuccess, onFailed)
+        repository.signUpWithEmailAndPassword(
+            email = email,
+            password = password,
+            name = nameState.value,
+            phoneNumber = phoneNumberState.value,
+            address = addressState.value,
+            onSuccess,
+            onFailed
+        )
+    }
 }

@@ -4,5 +4,6 @@ enum class AppNavRoute {
     SplashScreen,
     OnboardScreen,
     SignupScreen,
-    LoginScreen
+    LoginScreen,
+    ForgetPasswordScreen
 }

@@ -27,6 +27,9 @@ class Repository @Inject constructor(
     fun signUpWithEmailAndPassword(
         email: String,
         password: String,
+        name: String,
+        phoneNumber: String,
+        address: String,
         onSuccess: () -> Unit,
         onFailed: (DelimaException) -> Unit
     ) = firebaseDataSource.signUpWithEmailAndPassword(email, password, onSuccess, onFailed)
@@ -60,8 +63,8 @@ class Repository @Inject constructor(
     //sign up with credential
     fun signUpWithCredential(
         credential: PhoneAuthCredential,
-        name:String,
-        address:String,
+        name: String,
+        address: String,
         onSuccess: () -> Unit,
         onFailed: (DelimaException) -> Unit
     ) = firebaseDataSource.signUpWithCredential(credential, name, address, onSuccess, onFailed)

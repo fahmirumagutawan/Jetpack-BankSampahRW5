@@ -5,6 +5,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.filkom.core.data.repository.Repository
+import com.filkom.core.util.DelimaException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -25,21 +26,18 @@ class LoginViewModel @Inject constructor(
                 || passwordFirstState.value
     }
 
-
-    var isLoginSuccess = mutableStateOf(false)
-    fun login() {
+    fun login(
+        onSuccess:() -> Unit,
+        onFailed:(DelimaException) -> Unit
+    ) {
         val email = phoneNumberState.value + "@gmail.com"
         val password = passwordState.value
 
         repository.loginWithEmailAndPassword(
             email = email,
             password = password,
-            onSuccess = {
-                isLoginSuccess.value = true
-            },
-            onFailed = {
-                isLoginSuccess.value = false
-            }
+            onSuccess = onSuccess,
+            onFailed = onFailed
         )
     }
 }

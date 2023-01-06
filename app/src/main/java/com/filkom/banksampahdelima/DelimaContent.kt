@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.filkom.banksampahdelima.navigation.AppNavRoute
+import com.filkom.banksampahdelima.screen.ForgetPasswordScreen
 import com.filkom.banksampahdelima.screen.OnboardScreen
 import com.filkom.banksampahdelima.screen.SplashScreen
 import com.filkom.banksampahdelima.screen.auth.LoginScreen
@@ -147,7 +148,7 @@ fun DelimaNavHost(mainViewModel: MainViewModel) {
                     navController.navigate(route = AppNavRoute.LoginScreen.name)
                 },
                 navigateToHome = {
-                    Log.e("SUCCESS", "NAVIGATED TO HOME")
+
                 },
                 showSnackbar = showSnackbar
             )
@@ -159,10 +160,19 @@ fun DelimaNavHost(mainViewModel: MainViewModel) {
 
                 },
                 navigateToForgetPassword = {
-
+                    navController.navigate(route = AppNavRoute.ForgetPasswordScreen.name)
                 },
                 navigateToSignup = {
                     navController.navigate(route = AppNavRoute.SignupScreen.name)
+                },
+                showSnackbar = showSnackbar
+            )
+        }
+
+        composable(route = AppNavRoute.ForgetPasswordScreen.name) {
+            ForgetPasswordScreen(
+                onBackClicked = {
+                    navController.popBackStack()
                 }
             )
         }

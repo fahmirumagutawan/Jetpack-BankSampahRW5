@@ -30,7 +30,8 @@ import com.filkom.banksampahdelima.viewmodel.LoginViewModel
 fun LoginScreen(
     navigateToHome: () -> Unit,
     navigateToForgetPassword: () -> Unit,
-    navigateToSignup: () -> Unit
+    navigateToSignup: () -> Unit,
+    showSnackbar:(String) -> Unit
 ) {
     val logoWidth = LocalConfiguration.current.screenWidthDp / 3
     val viewModel = hiltViewModel<LoginViewModel>()
@@ -84,21 +85,21 @@ fun LoginScreen(
             }
         )
 
-//        // Password
-//        Spacer(modifier = Modifier.height(8.dp))
-//        AppTextInputNormal(
-//            modifier = Modifier.fillMaxWidth(),
-//            placeHolder = "Password",
-//            value = viewModel.passwordState.value,
-//            visualTransformation = PasswordVisualTransformation(),
-//            onValueChange = {
-//                viewModel.passwordFirstState.value = false
-//                viewModel.passwordState.value = it
-//            },
-//            isError = !viewModel.isPasswordValid.value,
-//            showWarningMessage = !viewModel.isPasswordValid.value,
-//            warningMessage = "Pastikan password sepanjang 6 huruf atau lebih"
-//        )
+        // Password
+        Spacer(modifier = Modifier.height(8.dp))
+        AppTextInputNormal(
+            modifier = Modifier.fillMaxWidth(),
+            placeHolder = "Password",
+            value = viewModel.passwordState.value,
+            visualTransformation = PasswordVisualTransformation(),
+            onValueChange = {
+                viewModel.passwordFirstState.value = false
+                viewModel.passwordState.value = it
+            },
+            isError = !viewModel.isPasswordValid.value,
+            showWarningMessage = !viewModel.isPasswordValid.value,
+            warningMessage = "Pastikan password sepanjang 6 huruf atau lebih"
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
         AppTextButton(onClick = navigateToForgetPassword) {
@@ -114,10 +115,14 @@ fun LoginScreen(
         AppButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                viewModel.login()
-                if (viewModel.isLoginSuccess.value) {
-                    navigateToHome()
-                }
+                viewModel.login(
+                    onSuccess = {
+                        navigateToHome()
+                    },
+                    onFailed = {
+                        showSnackbar(it.getMessage())
+                    }
+                )
             },
             text = "Masuk"
         )

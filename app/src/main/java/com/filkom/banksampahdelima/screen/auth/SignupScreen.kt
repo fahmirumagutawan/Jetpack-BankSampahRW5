@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -60,65 +61,9 @@ fun SignupScreen(
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val bottomSheetScaffoldState =
         rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
-    val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(key1 = viewModel.otpSecondLeft.value > 0) {
-        while (viewModel.otpSecondLeft.value > 0) {
-            delay(1000)
-            viewModel.otpSecondLeft.value -= 1
-        }
-    }
 
     AppBottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
-        sheetContent = {
-            AuthOtpSheet(
-                phoneNumber = viewModel.phoneNumberState.value,
-                otpValue = viewModel.otpState.value,
-                onOtpValueChanged = {
-                    viewModel.otpState.value = it
-                },
-                onContinueClicked = {
-                    val credential = PhoneAuthProvider.getCredential(
-                        viewModel.verificationId.value,
-                        viewModel.otpState.value
-                    )
-
-                    viewModel.signUpWithCredential(
-                        credential = credential,
-                        onSuccess = {
-                            navigateToHome()
-                        },
-                        onFailed = {
-                            showSnackbar(it.getMessage())
-                        }
-                    )
-                },
-                onResendClicked = {
-                    viewModel.sendOtp(
-                        onAutoCompleted = {
-                            //save user info
-                            it.smsCode?.let { code ->
-                                viewModel.otpState.value = code
-                                Handler().postDelayed(
-                                    {
-                                        navigateToHome()
-                                    },
-                                    2000
-                                )
-                            }
-                        },
-                        onCodeSent = { verificationId ->
-                            viewModel.verificationId.value = verificationId
-                        },
-                        onFailed = { exception ->
-                            showSnackbar(exception.getMessage())
-                        }
-                    )
-                },
-                otpSecondLeft = viewModel.otpSecondLeft.value
-            )
-        },
         sheetPeekHeight = 0.dp
     ) {
         Column(
@@ -202,21 +147,21 @@ fun SignupScreen(
                 warningMessage = "Alamat tidak boleh kosong!"
             )
 
-//            // Password
-//            Spacer(modifier = Modifier.height(8.dp))
-//            AppTextInputNormal(
-//                modifier = Modifier.fillMaxWidth(),
-//                placeHolder = "Password",
-//                value = viewModel.passwordState.value,
-//                onValueChange = {
-//                    viewModel.passwordFirstState.value = false
-//                    viewModel.passwordState.value = it
-//                },
-//                isError = !viewModel.isPasswordValid.value,
-//                showWarningMessage = !viewModel.isPasswordValid.value,
-//                warningMessage = "Password harus lebih dari 6 karakter!"
-//            )
-
+            // Password
+            Spacer(modifier = Modifier.height(8.dp))
+            AppTextInputNormal(
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "Password",
+                value = viewModel.passwordState.value,
+                visualTransformation = PasswordVisualTransformation(),
+                onValueChange = {
+                    viewModel.passwordFirstState.value = false
+                    viewModel.passwordState.value = it
+                },
+                isError = !viewModel.isPasswordValid.value,
+                showWarningMessage = !viewModel.isPasswordValid.value,
+                warningMessage = "Pastikan password sepanjang 6 huruf atau lebih"
+            )
 
             // Terms
             Spacer(modifier = Modifier.height(8.dp))
@@ -266,30 +211,14 @@ fun SignupScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     if (viewModel.isValidToSignUp.value) {
-                        viewModel.sendOtp(
-                            onAutoCompleted = {
-                                //save user info
-                                it.smsCode?.let { code ->
-                                    viewModel.otpState.value = code
-                                    Handler().postDelayed(
-                                        {
-                                            navigateToHome()
-                                        },
-                                        2000
-                                    )
-                                }
+                        viewModel.signUp(
+                            onSuccess = {
+                                navigateToHome()
                             },
-                            onCodeSent = { verificationId ->
-                                viewModel.verificationId.value = verificationId
-                            },
-                            onFailed = { exception ->
-                                showSnackbar(exception.getMessage())
+                            onFailed = {
+                                showSnackbar(it.getMessage())
                             }
                         )
-                        coroutineScope.launch {
-                            bottomSheetState.expand()
-                        }
-                        viewModel.otpSecondLeft.value = 20
                     } else {
                         viewModel.nameFirstState.value = false
                         viewModel.phoneNumberFirstState.value = false
