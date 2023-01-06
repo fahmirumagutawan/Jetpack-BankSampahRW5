@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.filkom.banksampahdelima.ui.theme.AppColor
 
@@ -53,7 +55,8 @@ fun AuthOtpSheet(
                 AppTextInputNormal(
                     placeHolder = "Kode OTP Kamu",
                     value = otpValue,
-                    onValueChange = onOtpValueChanged
+                    onValueChange = onOtpValueChanged,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
                 )
                 //Alert text here, probably will provide this later
             }

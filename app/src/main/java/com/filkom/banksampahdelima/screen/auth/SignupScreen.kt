@@ -3,6 +3,7 @@
 package com.filkom.banksampahdelima.screen.auth
 
 import android.os.Handler
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -53,6 +54,33 @@ fun SignupScreen(
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val bottomSheetScaffoldState =
         rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
+    val sendOtp = {
+        viewModel.sendOTP(
+            onAutoCompleted = {
+                Log.e("MASUK SINI", "${it.smsCode}")
+                it.smsCode?.let { code ->
+                    viewModel.otpState.value = code
+                    viewModel.signUp(
+                        onSuccess = {
+                            Handler().postDelayed(
+                                { navigateToHome() },
+                                2000
+                            )
+                        },
+                        onFailed = { exception ->
+                            showSnackbar(exception.getMessage())
+                        }
+                    )
+                }
+            },
+            onCodeSent = { verificationId ->
+                viewModel.verificationId.value = verificationId
+            },
+            onFailed = { exception ->
+                showSnackbar(exception.getMessage())
+            },
+        )
+    }
 
     LaunchedEffect(key1 = viewModel.otpSecondLeft.value > 0) {
         while (viewModel.otpSecondLeft.value > 0) {
@@ -73,44 +101,8 @@ fun SignupScreen(
                     viewModel.otpState.value = it
                 },
                 onResendClicked = {
-                    viewModel.sendOTP(
-                        onAutoCompleted = {
-                            it.smsCode?.let { code ->
-                                viewModel.otpState.value = code
-                                viewModel.signUp(
-                                    onSuccess = {
-                                        Handler().postDelayed(
-                                            { navigateToHome() },
-                                            2000
-                                        )
-                                    },
-                                    onFailed = { exception ->
-                                        showSnackbar(exception.getMessage())
-                                    }
-                                )
-                            }
-                        },
-                        onCodeSent = { verificationId ->
-                            viewModel.verificationId.value = verificationId
-                            val credential = PhoneAuthProvider.getCredential(
-                                viewModel.verificationId.value,
-                                viewModel.otpState.value
-                            )
-
-                            viewModel.signUpWithCredential(
-                                credential = credential,
-                                onSuccess = {
-                                    navigateToHome()
-                                },
-                                onFailed = {
-                                    showSnackbar(it.getMessage())
-                                }
-                            )
-                        },
-                        onFailed = { exception ->
-                            showSnackbar(exception.getMessage())
-                        },
-                    )
+                    viewModel.otpSecondLeft.value = 20
+                    sendOtp()
                 },
                 onContinueClicked = {
                     val credential = PhoneAuthProvider.getCredential(
@@ -280,45 +272,7 @@ fun SignupScreen(
                             bottomSheetState.expand()
                         }
                         viewModel.otpSecondLeft.value = 20
-                        viewModel.sendOTP(
-                            onAutoCompleted = {
-                                it.smsCode?.let { code ->
-                                    viewModel.otpState.value = code
-                                    viewModel.signUp(
-                                        onSuccess = {
-                                            Handler().postDelayed(
-                                                { navigateToHome() },
-                                                2000
-                                            )
-                                        },
-                                        onFailed = { exception ->
-                                            showSnackbar(exception.getMessage())
-                                        }
-                                    )
-                                }
-                            },
-                            onCodeSent = { verificationId ->
-                                viewModel.verificationId.value = verificationId
-
-                                val credential = PhoneAuthProvider.getCredential(
-                                    viewModel.verificationId.value,
-                                    viewModel.otpState.value
-                                )
-
-                                viewModel.signUpWithCredential(
-                                    credential = credential,
-                                    onSuccess = {
-                                        navigateToHome()
-                                    },
-                                    onFailed = {
-                                        showSnackbar(it.getMessage())
-                                    }
-                                )
-                            },
-                            onFailed = { exception ->
-                                showSnackbar(exception.getMessage())
-                            },
-                        )
+                        sendOtp()
                     } else {
                         viewModel.nameFirstState.value = false
                         viewModel.phoneNumberFirstState.value = false
