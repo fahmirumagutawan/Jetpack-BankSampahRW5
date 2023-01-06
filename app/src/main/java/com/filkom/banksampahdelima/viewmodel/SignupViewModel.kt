@@ -1,6 +1,5 @@
 package com.filkom.banksampahdelima.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,16 +7,13 @@ import com.filkom.banksampahdelima.phoneNumberAuthOptions
 import com.filkom.core.data.repository.Repository
 import com.filkom.core.util.DelimaException
 import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthOptions
-import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SignupViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
 ) : ViewModel() {
     var nameState = mutableStateOf("")
     var nameFirstState = mutableStateOf(true)
@@ -45,8 +41,11 @@ class SignupViewModel @Inject constructor(
                 || passwordFirstState.value
     }
 
-    var checkedState = mutableStateOf(false)
+    val otpState = mutableStateOf("")
+    val otpSecondLeft = mutableStateOf(0)
+    val verificationId = mutableStateOf("")
 
+    var checkedState = mutableStateOf(false)
     val isValidToSignUp = derivedStateOf {
         isNameValid.value &&
                 isPhoneNumberValid.value &&
@@ -56,9 +55,9 @@ class SignupViewModel @Inject constructor(
     }
 
     fun signUp(
-        onSuccess:(AuthResult) -> Unit,
-        onFailed:(DelimaException) -> Unit
-    ){
+        onSuccess: (AuthResult) -> Unit,
+        onFailed: (DelimaException) -> Unit,
+    ) {
         val email = phoneNumberState.value + "@delima.com"
         val password = passwordState.value
 
@@ -69,4 +68,26 @@ class SignupViewModel @Inject constructor(
             onFailed
         )
     }
+
+    fun sendOTP(
+        onAutoCompleted: (PhoneAuthCredential) -> Unit,
+        onCodeSent: (String) -> Unit,
+        onFailed: (DelimaException) -> Unit,
+    ) = repository.sendOtp(
+        phoneNumber =  "+62${phoneNumberState.value}",
+        options = phoneNumberAuthOptions,
+        onAutoCompleted,
+        onCodeSent,
+        onFailed
+    )
+
+    fun signUpWithCredential(
+        credential: PhoneAuthCredential,
+        onSuccess: () -> Unit,
+        onFailed: (DelimaException) -> Unit,
+    ) = repository.signUpWithCredential(credential,
+        nameState.value,
+        addressState.value,
+        onSuccess,
+        onFailed)
 }

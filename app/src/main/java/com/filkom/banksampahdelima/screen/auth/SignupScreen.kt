@@ -1,20 +1,14 @@
+@file:Suppress("DEPRECATION")
+
 package com.filkom.banksampahdelima.screen.auth
 
 import android.os.Handler
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
-import androidx.compose.material.rememberBottomSheetScaffoldState
-import androidx.compose.material.rememberBottomSheetState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,14 +31,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.filkom.banksampahdelima.R
-import com.filkom.banksampahdelima.component.AppBottomSheetScaffold
-import com.filkom.banksampahdelima.component.AppButton
-import com.filkom.banksampahdelima.component.AppText
-import com.filkom.banksampahdelima.component.AppTextInputNormal
-import com.filkom.banksampahdelima.component.AuthOtpSheet
-import com.filkom.banksampahdelima.component.TextType
+import com.filkom.banksampahdelima.component.*
 import com.filkom.banksampahdelima.ui.theme.AppColor
 import com.filkom.banksampahdelima.viewmodel.SignupViewModel
+import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -54,17 +44,92 @@ import kotlinx.coroutines.launch
 fun SignupScreen(
     navigateToLogin: () -> Unit,
     navigateToHome: () -> Unit,
-    showSnackbar: (String) -> Unit
+    showSnackbar: (String) -> Unit,
 ) {
+
+    val coroutineScope = rememberCoroutineScope()
     val logoWidth = LocalConfiguration.current.screenWidthDp / 3
     val viewModel = hiltViewModel<SignupViewModel>()
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val bottomSheetScaffoldState =
         rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
 
+    LaunchedEffect(key1 = viewModel.otpSecondLeft.value > 0) {
+        while (viewModel.otpSecondLeft.value > 0) {
+            delay(1000)
+            viewModel.otpSecondLeft.value -= 1
+        }
+    }
+
     AppBottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
-        sheetPeekHeight = 0.dp
+        sheetPeekHeight = 0.dp,
+        sheetContent = {
+            AuthOtpSheet(
+                phoneNumber = viewModel.phoneNumberState.value,
+                otpSecondLeft = viewModel.otpSecondLeft.value,
+                otpValue = viewModel.otpState.value,
+                onOtpValueChanged = {
+                    viewModel.otpState.value = it
+                },
+                onResendClicked = {
+                    viewModel.sendOTP(
+                        onAutoCompleted = {
+                            it.smsCode?.let { code ->
+                                viewModel.otpState.value = code
+                                viewModel.signUp(
+                                    onSuccess = {
+                                        Handler().postDelayed(
+                                            { navigateToHome() },
+                                            2000
+                                        )
+                                    },
+                                    onFailed = { exception ->
+                                        showSnackbar(exception.getMessage())
+                                    }
+                                )
+                            }
+                        },
+                        onCodeSent = { verificationId ->
+                            viewModel.verificationId.value = verificationId
+                            val credential = PhoneAuthProvider.getCredential(
+                                viewModel.verificationId.value,
+                                viewModel.otpState.value
+                            )
+
+                            viewModel.signUpWithCredential(
+                                credential = credential,
+                                onSuccess = {
+                                    navigateToHome()
+                                },
+                                onFailed = {
+                                    showSnackbar(it.getMessage())
+                                }
+                            )
+                        },
+                        onFailed = { exception ->
+                            showSnackbar(exception.getMessage())
+                        },
+                    )
+                },
+                onContinueClicked = {
+                    val credential = PhoneAuthProvider.getCredential(
+                        viewModel.verificationId.value,
+                        viewModel.otpState.value
+                    )
+
+                    viewModel.signUpWithCredential(
+                        credential = credential,
+                        onSuccess = {
+                            navigateToHome()
+                        },
+                        onFailed = {
+                            showSnackbar(it.getMessage())
+                        }
+                    )
+                }
+            )
+        }
     ) {
         Column(
             modifier = Modifier
@@ -211,13 +276,48 @@ fun SignupScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     if (viewModel.isValidToSignUp.value) {
-                        viewModel.signUp(
-                            onSuccess = {
-                                navigateToHome()
+                        coroutineScope.launch {
+                            bottomSheetState.expand()
+                        }
+                        viewModel.otpSecondLeft.value = 20
+                        viewModel.sendOTP(
+                            onAutoCompleted = {
+                                it.smsCode?.let { code ->
+                                    viewModel.otpState.value = code
+                                    viewModel.signUp(
+                                        onSuccess = {
+                                            Handler().postDelayed(
+                                                { navigateToHome() },
+                                                2000
+                                            )
+                                        },
+                                        onFailed = { exception ->
+                                            showSnackbar(exception.getMessage())
+                                        }
+                                    )
+                                }
                             },
-                            onFailed = {
-                                showSnackbar(it.getMessage())
-                            }
+                            onCodeSent = { verificationId ->
+                                viewModel.verificationId.value = verificationId
+
+                                val credential = PhoneAuthProvider.getCredential(
+                                    viewModel.verificationId.value,
+                                    viewModel.otpState.value
+                                )
+
+                                viewModel.signUpWithCredential(
+                                    credential = credential,
+                                    onSuccess = {
+                                        navigateToHome()
+                                    },
+                                    onFailed = {
+                                        showSnackbar(it.getMessage())
+                                    }
+                                )
+                            },
+                            onFailed = { exception ->
+                                showSnackbar(exception.getMessage())
+                            },
                         )
                     } else {
                         viewModel.nameFirstState.value = false

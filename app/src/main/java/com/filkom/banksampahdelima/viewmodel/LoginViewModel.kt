@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.filkom.core.data.repository.Repository
 import com.filkom.core.util.DelimaException
+import com.google.firebase.auth.AuthResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -27,7 +28,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun login(
-        onSuccess:() -> Unit,
+        onSuccess:(AuthResult) -> Unit,
         onFailed:(DelimaException) -> Unit
     ) {
         val email = phoneNumberState.value + "@delima.com"
