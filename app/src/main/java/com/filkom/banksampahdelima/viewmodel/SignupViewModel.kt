@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.filkom.banksampahdelima.phoneNumberAuthOptions
 import com.filkom.core.data.repository.Repository
 import com.filkom.core.util.DelimaException
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
@@ -55,7 +56,7 @@ class SignupViewModel @Inject constructor(
     }
 
     fun signUp(
-        onSuccess:() -> Unit,
+        onSuccess:(AuthResult) -> Unit,
         onFailed:(DelimaException) -> Unit
     ){
         val email = phoneNumberState.value + "@gmail.com"
@@ -64,9 +65,6 @@ class SignupViewModel @Inject constructor(
         repository.signUpWithEmailAndPassword(
             email = email,
             password = password,
-            name = nameState.value,
-            phoneNumber = phoneNumberState.value,
-            address = addressState.value,
             onSuccess,
             onFailed
         )
