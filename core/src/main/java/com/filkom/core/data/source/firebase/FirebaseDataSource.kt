@@ -12,6 +12,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCallbacks
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
+import io.ktor.client.features.auth.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -25,11 +26,11 @@ class FirebaseDataSource @Inject constructor(
     fun loginWithEmailAndPassword(
         email: String,
         password: String,
-        onSuccess: () -> Unit,
+        onSuccess: (AuthResult) -> Unit,
         onFailed: (DelimaException) -> Unit
     ) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener { onSuccess() }
+            .addOnSuccessListener { onSuccess(it) }
             .addOnFailureListener { onFailed(DelimaException(it.message)) }
     }
 
@@ -37,11 +38,11 @@ class FirebaseDataSource @Inject constructor(
     fun signUpWithEmailAndPassword(
         email: String,
         password: String,
-        onSuccess: () -> Unit,
+        onSuccess: (AuthResult) -> Unit,
         onFailed: (DelimaException) -> Unit
     ) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener { onSuccess() }
+            .addOnSuccessListener { onSuccess(it) }
             .addOnFailureListener { onFailed(DelimaException(it.message)) }
     }
 
