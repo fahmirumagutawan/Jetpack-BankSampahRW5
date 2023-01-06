@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
         onSuccess:() -> Unit,
         onFailed:(DelimaException) -> Unit
     ) {
-        val email = phoneNumberState.value + "@gmail.com"
+        val email = phoneNumberState.value + "@delima.com"
         val password = passwordState.value
 
         repository.loginWithEmailAndPassword(
