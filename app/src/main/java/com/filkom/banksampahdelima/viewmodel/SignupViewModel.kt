@@ -59,7 +59,7 @@ class SignupViewModel @Inject constructor(
         onSuccess:(AuthResult) -> Unit,
         onFailed:(DelimaException) -> Unit
     ){
-        val email = phoneNumberState.value + "@gmail.com"
+        val email = phoneNumberState.value + "@delima.com"
         val password = passwordState.value
 
         repository.signUpWithEmailAndPassword(
