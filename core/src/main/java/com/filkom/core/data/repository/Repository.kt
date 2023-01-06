@@ -21,7 +21,14 @@ class Repository @Inject constructor(
         password: String,
         onSuccess: () -> Unit,
         onFailed: (DelimaException) -> Unit
-    ) = firebaseDataSource.loginWithEmailAndPassword(email, password, onSuccess, onFailed)
+    ) = firebaseDataSource.loginWithEmailAndPassword(
+        email,
+        password,
+        onSuccess = {
+            //call API from remotedatasource here and also handle error too
+        },
+        onFailed = onFailed
+    )
 
     //Sign up with email and password
     fun signUpWithEmailAndPassword(
