@@ -39,12 +39,15 @@ fun SplashScreen(
             when{
                 firstTime -> navigateToOnboard()
                 else -> {
-                    viewModel.getBearerToken { token ->
-                        when(token){
-                            "" -> navigateToLogin()
-                            else -> navigateToHome()
-                        }
-                    }
+                    navigateToHome()
+
+                    //USE THIS AFTER API DEPLOYED
+//                    viewModel.getBearerToken { token ->
+//                        when(token){
+//                            "" -> navigateToLogin()
+//                            else -> navigateToHome()
+//                        }
+//                    }
                 }
             }
         }

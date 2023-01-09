@@ -29,7 +29,6 @@ fun AppTextInputNormal(
     contentSpacing: Dp = 4.dp,
     showWarningMessage: Boolean = false,
     warningMessage: String = "",
-    label: String = "",
     placeHolder: String,
     textStyle: TextStyle = TextType.Body1.style,
     value: String,
@@ -57,9 +56,6 @@ fun AppTextInputNormal(
     errorIndicatorColor: Color = AppColor.Error
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(contentSpacing)) {
-        if (label.isNotEmpty()) {
-            AppText(text = label, textType = TextType.Body1)
-        }
         OutlinedTextField(
             modifier = modifier,
             shape = shape,
@@ -85,12 +81,12 @@ fun AppTextInputNormal(
                 disabledIndicatorColor = disabledIndicatorColor,
                 errorIndicatorColor = errorIndicatorColor
             ),
-            placeholder = {
-                AppText(
-                    text = placeHolder,
-                    textType = TextType.Body1,
-                    color = placeHolderColor
-                )
+            label = {
+                    AppText(
+                        text = placeHolder,
+                        textType = TextType.Body1,
+                        color = if(isError) errorIndicatorColor else placeHolderColor
+                    )
             },
             textStyle = textStyle
         )
@@ -119,4 +115,9 @@ fun AppTextInputNormal(
             }
         }
     }
+}
+
+enum class TextInputLabelType{
+    INSIDE,
+    OUTSIDE
 }

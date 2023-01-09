@@ -89,14 +89,18 @@ fun OnboardScreen(
                                         //daftar
                                         AppButton(
                                             modifier = Modifier.fillMaxWidth(),
-                                            onClick = navigateToRegister,
+                                            onClick = {
+                                                viewModel.saveFirstTimeOpenAppState(navigateToRegister)
+                                            },
                                             text = "Daftar"
                                         )
 
                                         //masuk
                                         AppButton(
                                             modifier = Modifier.fillMaxWidth(),
-                                            onClick = navigateToLogin,
+                                            onClick = {
+                                                viewModel.saveFirstTimeOpenAppState(navigateToLogin)
+                                            },
                                             text = "Sudah punya akun? Masuk",
                                             borderWidth = 1.dp,
                                             borderColor = AppColor.Black,
@@ -114,7 +118,9 @@ fun OnboardScreen(
 
                         //Btns
                         Row(
-                            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 32.dp),
                             verticalAlignment = CenterVertically,
                             horizontalArrangement = SpaceBetween
                         ) {
