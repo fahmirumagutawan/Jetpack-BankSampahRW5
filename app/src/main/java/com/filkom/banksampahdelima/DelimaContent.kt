@@ -2,10 +2,10 @@ package com.filkom.banksampahdelima
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Recycling
@@ -16,16 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.filkom.banksampahdelima.component.AppBottomBar
 import com.filkom.banksampahdelima.navigation.AppNavRoute
+import com.filkom.banksampahdelima.screen.DashboardScreen
 import com.filkom.banksampahdelima.screen.ForgetPasswordScreen
 import com.filkom.banksampahdelima.screen.OnboardScreen
 import com.filkom.banksampahdelima.screen.SplashScreen
@@ -33,10 +30,7 @@ import com.filkom.banksampahdelima.screen.auth.LoginScreen
 import com.filkom.banksampahdelima.screen.auth.SignupScreen
 import com.filkom.banksampahdelima.ui.theme.AppColor
 import com.filkom.banksampahdelima.viewmodel.MainViewModel
-import com.filkom.core.util.DelimaException
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCallbacks
 import dagger.hilt.android.AndroidEntryPoint
@@ -149,7 +143,7 @@ class DelimaContent : ComponentActivity() {
                     }
                 },
                 floatingActionButton = {
-                    if(mainViewModel.showBottomMenu.value){
+                    if (mainViewModel.showBottomMenu.value) {
                         FloatingActionButton(
                             backgroundColor = AppColor.Primary500,
                             modifier = Modifier.onSizeChanged {
@@ -178,6 +172,7 @@ class DelimaContent : ComponentActivity() {
 
 @Composable
 fun DelimaNavHost(navController: NavHostController, mainViewModel: MainViewModel) {
+    val dashboardListState = rememberLazyListState()
     val showSnackbar: (message: String) -> Unit = { message ->
         mainViewModel.snackbarMessage.value = message
         mainViewModel.snackbarActive.value = true
@@ -278,7 +273,9 @@ fun DelimaNavHost(navController: NavHostController, mainViewModel: MainViewModel
         }
 
         composable(route = AppNavRoute.DashboardScreen.name) {
-
+            DashboardScreen(
+                lazyListState = dashboardListState
+            )
         }
 
         composable(route = AppNavRoute.OrderScreen.name) {

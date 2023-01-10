@@ -17,4 +17,7 @@ class MainViewModel @Inject constructor(
     val snackbarActionLabel = mutableStateOf("Tutup")
     val showBottomMenu = mutableStateOf(false)
     val currentRoute = mutableStateOf(AppNavRoute.SplashScreen.name)
+
+    //Dashboard screen
+    val showDashboardTopBar = mutableStateOf(false)
 }
