@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 object AppColor {
     val Black = Color(0xff000000)
     val White = Color(0xffffffff)
+    val Orange = Color(0xffeb7622)
 
     val GrayDisabled = Color(0xffDBDBDB)
     val GrayPlaceholder = Color(0xFFAAAAAA)

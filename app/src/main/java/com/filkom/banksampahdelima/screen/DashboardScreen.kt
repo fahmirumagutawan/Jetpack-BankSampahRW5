@@ -22,6 +22,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.layout.*
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.filkom.banksampahdelima.component.AppText
 import com.filkom.banksampahdelima.component.TextType
@@ -106,4 +107,10 @@ fun DashboardScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun DashboardPrev() {
+    DashboardScreen(lazyListState = rememberLazyListState())
 }
