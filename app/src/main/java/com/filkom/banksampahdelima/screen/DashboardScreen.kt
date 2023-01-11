@@ -108,9 +108,3 @@ fun DashboardScreen(
         }
     }
 }
-
-@Preview
-@Composable
-fun DashboardPrev() {
-    DashboardScreen(lazyListState = rememberLazyListState())
-}

@@ -9,5 +9,6 @@ enum class AppNavRoute {
     DashboardScreen,
     OrderScreen,
     NotificationScreen,
-    ProfileScreen
+    ProfileScreen,
+    LeaderboardScreen
 }
