@@ -274,7 +274,25 @@ fun DelimaNavHost(navController: NavHostController, mainViewModel: MainViewModel
 
         composable(route = AppNavRoute.DashboardScreen.name) {
             DashboardScreen(
-                lazyListState = dashboardListState
+                lazyListState = dashboardListState,
+                onTukarPointClicked = {
+
+                },
+                onHistoryClicked = {
+
+                },
+                onCalculatorClicked = {
+
+                },
+                onCategoryClicked = {
+
+                },
+                onLocationClicked = {
+
+                },
+                onSeeMoreArticle = {
+
+                }
             )
         }
 
