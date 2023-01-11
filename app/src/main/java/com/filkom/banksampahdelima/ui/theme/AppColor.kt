@@ -10,7 +10,8 @@ object AppColor {
     val GrayPlaceholder = Color(0xFFAAAAAA)
 
     val Primary600 = Color(0xff6ACC1A)
-    val Primary500 = Color(0xff439F6E)
+    val Primary650 = Color(0xff10AA1D)
+    val Primary500 = Color(0xff0C9B18)
     val Primary400 = Color(0xff03750D)
 
     val Secondary300 = Color(0xffE0D00F)
