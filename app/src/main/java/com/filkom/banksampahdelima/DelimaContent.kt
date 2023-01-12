@@ -26,8 +26,13 @@ import com.filkom.banksampahdelima.screen.DashboardScreen
 import com.filkom.banksampahdelima.screen.ForgetPasswordScreen
 import com.filkom.banksampahdelima.screen.OnboardScreen
 import com.filkom.banksampahdelima.screen.SplashScreen
+import com.filkom.banksampahdelima.screen.article.ArticleDetailScreen
+import com.filkom.banksampahdelima.screen.article.ArticleScreen
 import com.filkom.banksampahdelima.screen.auth.LoginScreen
 import com.filkom.banksampahdelima.screen.auth.SignupScreen
+import com.filkom.banksampahdelima.screen.leaderboard.LeaderboardScreen
+import com.filkom.banksampahdelima.screen.profile.ProfileScreen
+import com.filkom.banksampahdelima.screen.profile.edit_profile.EditProfileScreen
 import com.filkom.banksampahdelima.ui.theme.AppColor
 import com.filkom.banksampahdelima.viewmodel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -287,7 +292,23 @@ fun DelimaNavHost(navController: NavHostController, mainViewModel: MainViewModel
         }
 
         composable(route = AppNavRoute.ProfileScreen.name) {
+            ProfileScreen()
+        }
 
+        composable(route = AppNavRoute.LeaderboardScreen.name) {
+            LeaderboardScreen()
+        }
+
+        composable(route = AppNavRoute.ArticleScreen.name) {
+            ArticleScreen()
+        }
+
+        composable(route = AppNavRoute.ArticleDetailScreen.name) {
+            ArticleDetailScreen()
+        }
+
+        composable(route = AppNavRoute.EditProfileScreen.name) {
+            EditProfileScreen()
         }
     }
 }
